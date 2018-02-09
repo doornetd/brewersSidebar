@@ -353,7 +353,7 @@ def main():
 
     #update sidebar with new text
     subreddit.mod.update(description=final_text)
-    print(str(datetime.now()))
+    print("Updated " + MY_SUB + " at " +  str(datetime.now()))
 #---------------------------------------------------------------------    
 
 if __name__ == "__main__":
