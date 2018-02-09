@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 from urllib2 import urlopen
 import requests
 import praw
+from player_codes import player_codes
+from stat_urls import pitcher_urls, position_urls, positionl_urls, pitchingl_urls
 from datetime import datetime
 
 MY_SUB = "brewers"
@@ -18,80 +20,6 @@ WILDCARD_URL = 'https://nytimes.stats.com/mlb/standings_wildcard.asp'
 FANGRAPHS_URL = 'http://www.fangraphs.com/teams/brewers'
 TRANS_URL = 'http://www.spotrac.com/mlb/transactions/milwaukee-brewers/'
 
-player_codes = {'Jesus Aguilar': '[](/aguilar)',
-                'Chase Anderson': '[](/anderson)',
-                'Orlando Arcia': '[](/arcia)',
-                'Jett Bandy': '[](/bandy)',
-                'Jacob Barnes': '[](/barnes)',
-                'Ryan Braun': '[](/braun)',
-                'Keon Broxton': '[](/broxton)',
-                'Lorenzo Cain': '[](/cain)',
-                'Zach Davies': '[](/davies)',
-                'Junior Guerra': '[](/guerra)',
-                'Josh Hader': '[](/hader)',
-                'Jeremy Jeffress': '[](/jeffress)',
-                'Corey Knebel': '[](/knebel)',
-                'Jimmy Nelson': '[](/nelson)',
-                'Hernan Perez': '[](/perez)',
-                'Brett Phillips': '[](/phillips)',
-                'Manny Pina': '[](/pina)',
-                'Domingo Santana': '[](/santana)',
-                'Travis Shaw': '[](/shaw)',
-                'Eric Sogard': '[](/sogard)',
-                'Brent Suter': '[](/suter)',
-                'Eric Thames': '[](/thames)',
-                'Jonathan Villar': '[](/villar)',
-                'Stephen Vogt': '[](/vogt)',
-                'Aaron Wilkerson': '[](/wilkerson)',
-                'Christian Yelich': '[](/yelich)',
-                'Jhoulys Chacin': '[](/chacin)',
-                'Yovani Gallardo': '[](/gallardo)',
-                'Adrian Houser': '[](/houser)',
-                'Boone Logan': '[](/logan)',
-                'Jorge Lopez': '[](/lopez)',
-                'Freddy Peralta': '[](/peralta)',
-                'Jacob Nottingham': '[](/nottingham)',
-                'Andrew Susac': '[](/susac)',
-                'Tyler Webb': '[](/webb)',
-                'Mauricio Dubon': '[](/dubon)',
-                'Marcos Diplan': '[](/diplan)'}
-
-pitcher_urls = [['http://www.fangraphs.com/statsd.aspx?playerid=sa828677&position=P', 'Ortiz', '[](/prospect-ortiz)'],
-                ['http://www.fangraphs.com/statsd.aspx?playerid=sa873673&position=P', 'Burnes', '[](/prospect-burnes)'],
-                ['http://www.fangraphs.com/statsd.aspx?playerid=sa737343&position=P', 'Peralta', '[](/prospect-peralta)'],
-                ['http://www.fangraphs.com/statsd.aspx?playerid=sa828590&position=P', 'Diplan', '[](/prospect-diplan)'],
-                ['http://www.fangraphs.com/statsd.aspx?playerid=sa828707&position=P', 'Supak', '[](/prospect-supak)']]
-
-position_urls = [['http://www.fangraphs.com/statsd.aspx?playerid=sa738510&position=OF', 'Ray', '[](/prospect-ray)'],
-                 ['http://www.fangraphs.com/statsd.aspx?playerid=sa3004043&position=2B', 'Hiura', '[](/prospect-hiura)'],
-                 ['http://www.fangraphs.com/statsd.aspx?playerid=sa3004968&position=OF', 'Lutz', '[](/prospect-lutz)'],
-                 ['http://www.fangraphs.com/statsd.aspx?playerid=sa738378&position=2B/SS', 'Dubon', '[](/prospect-dubon)'],
-                 ['http://www.fangraphs.com/statsd.aspx?playerid=sa872722&position=3B', 'Erceg', '[](/prospect-erceg)']]
-
-positionl_urls = [[('http://www.fangraphs.com/leaders.aspx?pos=all&stats=bat'
-                  '&lg=all&qual=100&type=8&season=2017&month=0&season1=2017'
-                  '&ind=0&team=23&rost=0&age=0&filter=&players=0&sort=20,d'), 20, 'WAR'],
-                [('http://www.fangraphs.com/leaders.aspx?pos=all&stats=bat'
-                  '&lg=all&qual=100&type=8&season=2017&month=0&season1=2017'
-                  '&ind=0&team=23&rost=0&age=0&filter=&players=0&sort=16,d'), 16, 'wRC+'],
-                [('http://www.fangraphs.com/leaders.aspx?pos=all&stats=bat'
-                  '&lg=all&qual=100&type=8&season=2017&month=0&season1=2017'
-                  '&ind=0&team=23&rost=0&age=0&filter=&players=0&sort=4,d'), 4, 'HR'],
-                [('http://www.fangraphs.com/leaders.aspx?pos=all&stats=bat'
-                  '&lg=all&qual=100&type=8&season=2017&month=0&season1=2017'
-                  '&ind=0&team=23&rost=0&age=0&filter=&players=0&sort=12,d'), 12, 'AVG']]
-pitchingl_urls = [[('https://www.fangraphs.com/leaders.aspx?pos=all&stats=pit'
-                    '&lg=all&qual=20&type=8&season=2017&month=0&season1=2017'
-                    '&ind=0&team=23&rost=0&age=0&filter=&players=0&sort=18,d'), 18, 'WAR'],
-                [('https://www.fangraphs.com/leaders.aspx?pos=all&stats=pit'
-                    '&lg=all&qual=20&type=8&season=2017&month=0&season1=2017'
-                    '&ind=0&team=23&rost=0&age=0&filter=&players=0&sort=15,a'), 15, 'ERA'],
-                [('https://www.fangraphs.com/leaders.aspx?pos=all&stats=pit'
-                    '&lg=all&qual=20&type=8&season=2017&month=0&season1=2017'
-                    '&ind=0&team=23&rost=0&age=0&filter=&players=0&sort=16,a'), 16, 'FIP'],
-                [('https://www.fangraphs.com/leaders.aspx?pos=all&stats=pit'
-                    '&lg=all&qual=20&type=8&season=2017&month=0&season1=2017'
-                    '&ind=0&team=23&rost=0&age=0&filter=&players=0&sort=8,d'), 8, 'K/9']]
 
 #---------------------------------------------------------------------    
 
