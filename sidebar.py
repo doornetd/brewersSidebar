@@ -198,7 +198,7 @@ def main():
             name = row.find('a').text
             detail = row.find('p').text
             trans_table.append([name, detail])
-            print(date + " " + name + " " + detail)
+            #print(date + " " + name + " " + detail)
             count += 1
     transactions = parseTable(trans_table, "## Recent Transactions")   
     '''
@@ -327,16 +327,16 @@ def main():
                 if name in player_codes:
                     name = player_codes[name] + name
                 pitchingl_table.append([url[2], name, cells[url[1]].string])
-                print(url[2] + ' ' + cells[1].string + ' ' + cells[url[1]].string)
+                #print(url[2] + ' ' + cells[1].string + ' ' + cells[url[1]].string)
             else:
                 pitchingl_table.append(['', cells[1].string, cells[url[1]].string])
-                print('    ' + ' ' + cells[1].string + ' ' + cells[url[1]].string)
+                #print('    ' + ' ' + cells[1].string + ' ' + cells[url[1]].string)
 
     position_leaders = parseTable(positionl_table, "## Batting Leaders")
     pitching_leaders = parseTable(pitchingl_table, "## Pitching Leaders")    
     
     #-------------------------------  
-
+    print("before subreddit shit")
     #grab the text from the sidebar and split
     subreddit = reddit.subreddit(MY_SUB)
     sidebar = subreddit.description
@@ -349,11 +349,11 @@ def main():
         + position_leaders + pitching_leaders \
         + '[](/brewersbort)' + new_text[2]
 
-    print(final_text)
+    #print(final_text)
 
     #update sidebar with new text
     subreddit.mod.update(description=final_text)
-
+    print(str(datetime.now()))
 #---------------------------------------------------------------------    
 
 if __name__ == "__main__":
