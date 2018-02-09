@@ -7,7 +7,7 @@ import requests
 import praw
 from datetime import datetime
 
-MY_SUB = "brewerstest"
+MY_SUB = "brewers"
 MY_USERNAME = 'BrewersBort'
 MY_PASSWORD = 'CubsSuck69'
 MY_USER_AGENT = 'Sidebar updater by /u/BrewersBort'
