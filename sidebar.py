@@ -336,7 +336,6 @@ def main():
     pitching_leaders = parseTable(pitchingl_table, "## Pitching Leaders")    
     
     #-------------------------------  
-    print("before subreddit shit")
     #grab the text from the sidebar and split
     subreddit = reddit.subreddit(MY_SUB)
     sidebar = subreddit.description
