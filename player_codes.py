@@ -35,4 +35,4 @@ player_codes = {'Jesus Aguilar': '[](/aguilar)',
                 'Tyler Webb': '[](/webb)',
                 'Mauricio Dubon': '[](/dubon)',
                 'Marcos Diplan': '[](/diplan)',
-		'Matt Albers': '[](/albers)'}]
+		'Matt Albers': '[](/albers)'}
