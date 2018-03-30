@@ -10,7 +10,7 @@ from player_codes import player_codes
 from stat_urls import pitcher_urls, position_urls, positionl_urls, pitchingl_urls
 from datetime import datetime
 
-MY_SUB = "brewers"
+MY_SUB = "brewerstest"
 MY_USERNAME = 'BrewersBort'
 MY_PASSWORD = 'CubsSuck69'
 MY_USER_AGENT = 'Sidebar updater by /u/BrewersBort'
