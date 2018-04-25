@@ -37,4 +37,6 @@ player_codes = {'Jesus Aguilar': '[](/aguilar)',
                 'Marcos Diplan': '[](/diplan)',
 		'Ji-Man Choi': '[](/choi)',
 		'Dan Jennings': '[](/jennings)',
-		'Matt Albers': '[](/albers)'}
+		'Matt Albers': '[](/albers)',
+		'Wade Miley': '[](/miley)',
+		'Taylor Williams': '[](/williams)'}

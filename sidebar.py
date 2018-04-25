@@ -18,7 +18,8 @@ MY_CLIENT_ID = 'iZZZ8xUDjPT5eQ'
 MY_CLIENT_SECRET = 'Xe4PEOPswOZ5nKcFkqjWfFvBuEo'
 
 WILDCARD_URL = 'https://nytimes.stats.com/mlb/standings_wildcard.asp'
-FANGRAPHS_URL = 'http://www.spotrac.com/mlb/milwaukee-brewers/payroll/'
+FANGRAPHS_URL = 'https://www.fangraphs.com/teams/brewers'
+SPOTRAC_URL = 'http://www.spotrac.com/mlb/milwaukee-brewers/payroll/'
 TRANS_URL = 'http://www.spotrac.com/mlb/transactions/milwaukee-brewers/'
 
 
@@ -93,8 +94,26 @@ def main():
     '''
     #-------------------------------
     
-    #find injury table from fangraphs
+    #---------Fangraphs injuries--------
+    #Find injury table from fangraphs
     soup = setupSoup(FANGRAPHS_URL)
+    injury_table = []
+    injury_table.append(["Player", "Injury", "Status"])
+    brewer_injuries = soup.find_all('table')[8].find_all('tr')
+    for row in brewer_injuries:
+       temp_array = []
+       cells = row.find_all('td')
+       temp_array = [cells[0].string, cells[1].string, cells[2].string]
+       if temp_array[0] in player_codes:
+          temp_array[0] = player_codes[temp_array[0]]
+       injury_table.append(temp_array)
+    injuries = parseTable(injury_table, "## Injury Report")
+       
+
+    '''
+    #---------Spotrac injuries---------- 	
+    #find injury table from spotrac
+    soup = setupSoup(SPOTRAC_URL)
 
     injury_table = []
     brewer_injuries = soup.find_all('table')[1].find_all('tr')
@@ -111,6 +130,7 @@ def main():
                 temp_array[0] = player_codes[temp_array[0]]
         injury_table.append(temp_array)
     injuries = parseTable(injury_table, "## Injury Report")
+    '''
 
     #-------------------------------
 
@@ -130,22 +150,7 @@ def main():
             #print(date + " " + name + " " + detail)
             count += 1
     transactions = parseTable(trans_table, "## Recent Transactions")   
-    '''
-    #find transactions table from fangraphs
-    trans_table = []
-    brewer_trans = soup.find_all('table')[10].find_all('tr')
-    trans_table.append(["Date", "Transaction"])
-    count = 0
-    for row in brewer_trans:
-        if(count < 5):
-            temp_array = []
-            cells = row.find_all('td')
-            for cell in cells:
-                temp_array.append(cell.string)
-            trans_table.append(temp_array)
-            count += 1
-    transactions = parseTable(trans_table, "## Recent Transactions")
-    '''
+    
     #-------------------------------
 
     #find pitching and batting prospect last game statistics
@@ -261,8 +266,8 @@ def main():
                 pitchingl_table.append(['', cells[1].string, cells[url[1]].string])
                 #print('    ' + ' ' + cells[1].string + ' ' + cells[url[1]].string)
 
-    position_leaders = parseTable(positionl_table, "## Batting Leaders")
-    pitching_leaders = parseTable(pitchingl_table, "## Pitching Leaders")    
+    position_leaders = parseTable(positionl_table, "## Batting Leaders \n# *qualififed batters")
+    pitching_leaders = parseTable(pitchingl_table, "## Pitching Leaders \n# *min. 10 IP")    
     
     #-------------------------------  
     #grab the text from the sidebar and split
