@@ -12,7 +12,7 @@ from datetime import datetime
 
 MY_SUB = "brewers"
 MY_USERNAME = 'BrewersBort'
-MY_PASSWORD = 'CubsSuck69'
+MY_PASSWORD = 'example_password1'
 MY_USER_AGENT = 'Sidebar updater by /u/BrewersBort'
 MY_CLIENT_ID = 'iZZZ8xUDjPT5eQ'
 MY_CLIENT_SECRET = 'Xe4PEOPswOZ5nKcFkqjWfFvBuEo'
