@@ -166,9 +166,11 @@ def main():
         body = soup.find_all('tbody')[3]
         row = body.find_all('tr')[2]
         cells = row.find_all('td')
-
+	
+	print(url)
         level = cells[1].string[5:-1]
         tag = "[](" + url[0] + ") " + url[1]
+	print(cells[0].string)
         now = datetime.strptime(cells[0].string, '%Y-%m-%d').date()
         gamedate = now.strftime('%B %d, %Y')
         pitching_table.append([gamedate, '', '', '', '', ''])
