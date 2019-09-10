@@ -76,8 +76,8 @@ def main():
     reddit = setup_reddit()
 
     #find wildcard table from NYT
-    soup = setupSoup(WILDCARD_URL)
-    '''
+    '''soup = setupSoup(WILDCARD_URL)
+    
     nl_table = soup.find_all('table')[2].find_all('tr')
 
     wildcard_table = []
@@ -100,13 +100,17 @@ def main():
     injury_table = []
     injury_table.append(["Player", "Injury", "Status"])
     brewer_injuries = soup.find_all('table')[8].find_all('tr')
-    for row in brewer_injuries:
-       temp_array = []
-       cells = row.find_all('td')
-       temp_array = [cells[0].string, cells[1].string, cells[2].string]
-       if temp_array[0] in player_codes:
-          temp_array[0] = player_codes[temp_array[0]]
-       injury_table.append(temp_array)
+    try:
+	for row in brewer_injuries:
+       		temp_array = []
+       		cells = row.find_all('td')
+       		temp_array = [cells[0].string, cells[1].string, cells[2].string]
+       		if temp_array[0] in player_codes:
+          		last_name = temp_array[0].split()[-1]          
+          		temp_array[0] = player_codes[temp_array[0]] + " " + last_name
+       		injury_table.append(temp_array)
+    except:
+	injury_table.append(["No", "recent", "injuries"])
     injuries = parseTable(injury_table, "## Injury Report")
        
 
@@ -174,8 +178,7 @@ def main():
         pitching_table.append([gamedate, '', '', '', '', ''])
         pitching_table.append([tag, level, cells[10].string, cells[14].string, cells[12].string, cells[16].string])
 
-        '''
-        adv_url = url[0] + '&type=-2&gds=&gde=&season=2017'
+        adv_url = url[0] + '&type=-2&gds=&gde=&season=2019'
         soup = setupSoup(adv_url)
         temp_array = []
 
@@ -184,7 +187,7 @@ def main():
         cells = row.find_all('td')
         pitching_table.append(['Season', 'ERA', 'FIP', 'WHIP', 'K/9', 'BB/9'])
         pitching_table.append(['', cells[15].string, cells[16].string, cells[12].string, cells[4].string, cells[5].string])
-        '''
+        
         #print(tag + " " + level + " " + cells[10].string + " " + cells[14].string + " " + cells[12].string + " " + cells[16].string)
         
     for url in position_urls:        
@@ -202,8 +205,7 @@ def main():
         position_table.append([gamedate, '', '', '', '', ''])
         position_table.append([tag, level, cells[4].string, cells[6].string, cells[13].string, cells[10].string])
 
-        '''
-        adv_url = url[0] + '&type=-2&gds=&gde=&season=2017'
+        adv_url = url[0] + '&type=-2&gds=&gde=&season=2019'
         soup = setupSoup(adv_url)
         temp_array = []
 
@@ -214,7 +216,6 @@ def main():
         position_table.append(['Season', 'AVG', 'OBP', 'SLG', 'K%', 'wRC+'])
         position_table.append(['', cells[6].string, cells[7].string, cells[8].string, cells[4].string, cells[17].string])
         #print(tag + " " + level + " " + cells[4].string + " " + cells[6].string + " " + cells[13].string + " " + cells[10].string)
-        '''
             
     pitching = parseTable(pitching_table, "## Pitching Prospects Update")
     position = parseTable(position_table, "## Position Prospects Update")
@@ -266,7 +267,7 @@ def main():
                 pitchingl_table.append(['', cells[1].string, cells[url[1]].string])
                 #print('    ' + ' ' + cells[1].string + ' ' + cells[url[1]].string)
 
-    position_leaders = parseTable(positionl_table, "## Batting Leaders \n# *qualififed batters")
+    position_leaders = parseTable(positionl_table, "## Batting Leaders \n# *min 20 PA")
     pitching_leaders = parseTable(pitchingl_table, "## Pitching Leaders \n# *min. 10 IP")    
     
     #-------------------------------  
